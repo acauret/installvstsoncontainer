@@ -723,8 +723,7 @@ return $TempPassword
 
     # Install and VSTS Agent
     $ascii=$NULL;For ($a=33;$a -le 126;$a++) {$ascii+=,[char][byte]$a}
-    $replace = $ascii -replace '[^a-zA-Z0-9]', ''
-    $password = GET-Temppassword -length 12 -sourcedata $replace
+    $password = GET-Temppassword -length 10 -sourcedata $ascii
        
     #Create Local user
     invoke-command -scriptblock {cmd /c "net user useradmin $($password) /add /passwordreq:yes /passwordchg:no"} 
