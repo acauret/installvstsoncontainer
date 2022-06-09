@@ -232,7 +232,7 @@ param (
             [Parameter(Mandatory=$false)][string]$agentNameSuffix,
             [Parameter(Mandatory=$true)][string]$poolName,
             [Parameter(Mandatory=$true)][string]$windowsLogonAccount,
-            [Parameter(Mandatory=$false)][string]$windowsLogonPassword = "DogDish777!!!!",
+            [Parameter(Mandatory=$true)][string]$windowsLogonPassword,
             [Parameter(Mandatory=$true)][ValidatePattern("[c-zC-Z]")][ValidateLength(1, 1)][string]$driveLetter,
             [Parameter(Mandatory=$false)][string]$workDirectory,
             [Parameter(Mandatory=$true)][boolean]$runAsAutoLogon
@@ -726,7 +726,7 @@ return $TempPassword
     $password = GET-Temppassword -length 43 -sourcedata $ascii
        
     #Create Local user
-    invoke-command -scriptblock {cmd /c "net user useradmin DogDish777!!!! /add /passwordreq:yes /passwordchg:no"} 
+    invoke-command -scriptblock {cmd /c "net user useradmin $($password) /add /passwordreq:yes /passwordchg:no"} 
     invoke-command -scriptblock {cmd /c "NET LOCALGROUP Administrators useradmin /ADD"} 
     # Set SSL version preference
     [Net.ServicePointManager]::SecurityProtocol = "Tls12, Tls11, Tls" # Original: Ssl3, Tls
@@ -738,7 +738,7 @@ return $TempPassword
 
     $Date = Get-Date -Format yyyyMMdd-HHmmss
     $AgentName = "$AgentNamePrefix-$Date"
-    Install-VstsAgent -vstsAccount $VSTSAccountName -vstsUserPassword $PATToken  -agentName $AgentName -poolName $PoolName -windowsLogonAccount "$($hostname)\useradmin"  -driveLetter "C" -runAsAutoLogon:$false
+    Install-VstsAgent -vstsAccount $VSTSAccountName -vstsUserPassword $PATToken  -agentName $AgentName -poolName $PoolName -windowsLogonAccount "$($hostname)\useradmin" -windowsLogonPassword "$($password)" -driveLetter "C" -runAsAutoLogon:$false
     $AgentInstallEnd = Get-Date
     $AgentInstallDuration = New-TimeSpan -Start $PoShModulelInstallEnd -End $AgentInstallEnd
     Write-Host "Agent installation took $($AgentInstallDuration.Hours.ToString("00")):$($AgentInstallDuration.Minutes.ToString("00")):$($AgentInstallDuration.Seconds.ToString("00")) (HH:mm:ss)"
