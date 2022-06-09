@@ -729,7 +729,7 @@ return $TempPassword
     invoke-command -scriptblock {cmd /c "net user useradmin $($password) /add /passwordreq:yes /passwordchg:no"} 
     invoke-command -scriptblock {cmd /c "NET LOCALGROUP Administrators useradmin /ADD"} 
     # Set SSL version preference
-    [Net.ServicePointManager]::SecurityProtocol = "Tls12, Tls11, Tls" # Original: Ssl3, Tls
+    [Net.ServicePointManager]::SecurityProtocol = "Tls12" # Original: Ssl3, Tls
     # Set MaxEnvelopeSizekb
     invoke-command -scriptblock {cmd /c 'winrm set winrm/config @{MaxEnvelopeSizekb="8192" }'}
     #
