@@ -722,7 +722,7 @@ return $TempPassword
     Write-Host "PowerShell module installation took $($PoShModulelInstallDuration.Hours.ToString("00")):$($PoShModulelInstallDuration.Minutes.ToString("00")):$($PoShModulelInstallDuration.Seconds.ToString("00")) (HH:mm:ss)"
 
     # Install and VSTS Agent
-    $ascii=$NULL;For ($a=33;$a –le 126;$a++) {$ascii+=,[char][byte]$a}
+    $ascii=$NULL;For ($a=33;$a -le 126;$a++) {$ascii+=,[char][byte]$a}
     $replace = $ascii -replace '[^a-zA-Z0-9]', ''
     $password = GET-Temppassword -length 12 -sourcedata $replace
        
